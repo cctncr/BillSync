@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">BillSync</string>
+    <string name="status">Status</string>
+    <string name="frequency">Frequency</string>
+    <string name="greeting_welcome_back">Welcome back,</string>
+    <string name="profile_icon">Profile Icon</string>
+    <string name="avg_daily_cost">Avg. Daily Cost</string>
+    <string name="active_subs">Active Subs</string>
 </resources>

@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             BillSyncTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
+                    innerPadding
                 }
             }
         }
