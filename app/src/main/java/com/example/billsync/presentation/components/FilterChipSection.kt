@@ -16,10 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.billsync.R
-import com.example.billsync.domain.model.BillStatus
 import com.example.billsync.presentation.model.FilterOption
-import com.example.billsync.domain.model.PaymentFrequency
-
 
 @Composable
 fun FilterChipSection(
@@ -44,7 +41,7 @@ fun FilterChipSection(
             onFilterClick = { filter -> onBillStatusSelected(filter) }
         )
 
-        Spacer(modifier.padding(vertical = 8.dp))
+        Spacer(Modifier.padding(vertical = 8.dp))
 
         FilterSectionTitle(
             text = stringResource(R.string.frequency),
@@ -103,18 +100,12 @@ private fun FilterSectionTitle(text: String, modifier: Modifier = Modifier) {
 @Composable
 fun FilterChipSection_BillStatus_Preview() {
     FilterChipRow(
-        options =
-            buildList {
-                BillStatus.entries.forEach { billStatus ->
-                    add(
-                        FilterOption(
-                            billStatus.ordinal.toString(),
-                            billStatus.displayName,
-                            false
-                        )
-                    )
-                }
-            },
+        options = listOf(
+            FilterOption("all", "All", true),
+            FilterOption("paid", "Paid", false),
+            FilterOption("pending", "Pending", false),
+            FilterOption("overdue", "Overdue", false)
+        ),
         onFilterClick = { }
     )
 }
@@ -123,18 +114,13 @@ fun FilterChipSection_BillStatus_Preview() {
 @Composable
 fun FilterChipSection_PaymentFrequency_Preview() {
     FilterChipRow(
-        options =
-            buildList {
-                PaymentFrequency.entries.forEach { billStatus ->
-                    add(
-                        FilterOption(
-                            billStatus.ordinal.toString(),
-                            billStatus.displayName,
-                            false
-                        )
-                    )
-                }
-            },
+        options = listOf(
+            FilterOption("all", "All", true),
+            FilterOption("monthly", "Monthly", false),
+            FilterOption("quarterly", "Quarterly", false),
+            FilterOption("yearly", "Yearly", false),
+            FilterOption("onetime", "One Time", false)
+        ),
         onFilterClick = { }
     )
 }
@@ -143,29 +129,22 @@ fun FilterChipSection_PaymentFrequency_Preview() {
 @Composable
 fun FilterChipSection_Preview() {
     FilterChipSection(
-        billStatusOptions = buildList {
-            BillStatus.entries.forEach { billStatus ->
-                add(
-                    FilterOption(
-                        billStatus.ordinal.toString(),
-                        billStatus.displayName,
-                        false
-                    )
-                )
-            }
-        },
-        paymentFrequencyOptions = buildList {
-            PaymentFrequency.entries.forEach { billStatus ->
-                add(
-                    FilterOption(
-                        billStatus.ordinal.toString(),
-                        billStatus.displayName,
-                        false
-                    )
-                )
-            }
-        },
+        billStatusOptions =
+            listOf(
+                FilterOption("all", "All", true),
+                FilterOption("paid", "Paid", false),
+                FilterOption("pending", "Pending", false),
+                FilterOption("overdue", "Overdue", false),
+            ),
+        onFrequencySelected = { },
         onBillStatusSelected = { },
-        onFrequencySelected = { }
+        paymentFrequencyOptions =
+            listOf(
+                FilterOption("all", "All", false),
+                FilterOption("weekly", "Weekly", true),
+                FilterOption("monthly", "Monthly", false),
+                FilterOption("yearly", "Yearly", false),
+                FilterOption("onetime", "One Time", false),
+            )
     )
 }

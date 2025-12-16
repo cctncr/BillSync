@@ -15,8 +15,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BillSyncTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    innerPadding
+                Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
+
                 }
             }
         }
