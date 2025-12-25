@@ -9,6 +9,8 @@
     <string name="brand_icon">Brand Icon</string>
     <string name="brand_icon_desc">%s icon</string>
 
+    <string name="filter_all">All</string>
+
     <string name="bill_status_paid">Paid</string>
     <string name="bill_status_pending">Pending</string>
     <string name="bill_status_overdue">Overdue</string>
@@ -31,6 +33,15 @@
     </plurals>
     <string name="due_today">Due today</string>
     <string name="due_tomorrow">Due tomorrow</string>
+    <string name="sort_option_date_asc">Due Date (Sooner First)</string>
+    <string name="sort_option_date_desc">Due Date (Later First)</string>
+    <string name="sort_option_amount_asc">Amount (Low to High)</string>
+    <string name="sort_option_amount_desc">Amount (High to Low)</string>
+    <string name="sort_option_date_asc_label">Earliest</string>
+    <string name="sort_option_date_desc_label">Latest</string>
+    <string name="sort_option_amount_asc_label">Lowest Amount</string>
+    <string name="sort_option_amount_desc_label">Highest Amount</string>
+    <string name="sorting_by">Sorting By</string>
     <plurals name="days_left">
         <item quantity="one">%d day left</item>
         <item quantity="other">%d days left</item>
