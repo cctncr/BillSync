@@ -246,7 +246,7 @@ private fun SortActionMenu(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun SortActionMenu_Preview() {
     SortActionMenu(

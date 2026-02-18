@@ -35,6 +35,7 @@ import java.time.LocalDate
 @Composable
 fun SubscriptionCard(
     subscription: Subscription,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     currentDate: LocalDate = LocalDate.now()
 ) {
@@ -48,6 +49,7 @@ fun SubscriptionCard(
         shape = RoundedCornerShape(24.dp),
         border = BorderStroke(1.dp, borderColor),
         color = MaterialTheme.colorScheme.surface,
+        onClick = onClick,
         modifier = modifier
     ) {
         Row(
@@ -172,7 +174,8 @@ fun SubscriptionCard_Pending_Preview() {
             brandColor = Color.Red,
             brandIcon = null
         ),
-        currentDate = LocalDate.now()
+        currentDate = LocalDate.now(),
+        onClick = { }
     )
 }
 
@@ -190,7 +193,8 @@ fun SubscriptionCard_Overdue_Preview() {
             brandColor = Color.Green,
             brandIcon = null
         ),
-        currentDate = LocalDate.now()
+        currentDate = LocalDate.now(),
+        onClick = { }
     )
 }
 
@@ -208,6 +212,7 @@ fun SubscriptionCard_Paid_Preview() {
             brandColor = Color.Cyan,
             brandIcon = null
         ),
-        currentDate = LocalDate.now()
+        currentDate = LocalDate.now(),
+        onClick = { }
     )
 }

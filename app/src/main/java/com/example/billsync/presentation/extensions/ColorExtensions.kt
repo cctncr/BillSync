@@ -6,7 +6,7 @@ import androidx.core.graphics.toColorInt
 fun String.toComposeColor(): Color {
     return try {
         Color(this.toColorInt())
-    } catch (e: IllegalArgumentException) {
+    } catch (_: IllegalArgumentException) {
         Color.Gray
     }
 }

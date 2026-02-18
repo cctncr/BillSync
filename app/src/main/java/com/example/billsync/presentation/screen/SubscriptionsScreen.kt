@@ -1,5 +1,6 @@
 package com.example.billsync.presentation.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +24,8 @@ import com.example.billsync.presentation.viewmodel.SubscriptionViewModel
 
 @Composable
 fun SubscriptionScreen(
-    viewModel: SubscriptionViewModel
+    viewModel: SubscriptionViewModel,
+    onSubscriptionCardClick: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -87,6 +89,7 @@ fun SubscriptionScreen(
             ) { subscription ->
                 SubscriptionCard(
                     subscription = subscription,
+                    onClick = { onSubscriptionCardClick(subscription.id) },
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
@@ -94,10 +97,11 @@ fun SubscriptionScreen(
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Preview(showBackground = true)
 @Composable
 fun SubscriptionScreen_Preview() {
     SubscriptionScreen(
         viewModel = SubscriptionViewModel()
-    )
+    ) { }
 }
