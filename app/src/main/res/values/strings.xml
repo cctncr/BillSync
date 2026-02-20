@@ -1,3 +1,49 @@
 <resources>
     <string name="app_name">BillSync</string>
+    <string name="status">Status</string>
+    <string name="frequency">Frequency</string>
+    <string name="greeting_welcome_back">Welcome back,</string>
+    <string name="profile_icon">Profile Icon</string>
+    <string name="avg_daily_cost">Avg. Daily Cost</string>
+    <string name="active_subs">Active Subs</string>
+    <string name="brand_icon">Brand Icon</string>
+    <string name="brand_icon_desc">%s icon</string>
+
+    <string name="filter_all">All</string>
+
+    <string name="bill_status_paid">Paid</string>
+    <string name="bill_status_pending">Pending</string>
+    <string name="bill_status_overdue">Overdue</string>
+
+    <string name="payment_frequency_weekly">Weekly</string>
+    <string name="payment_frequency_monthly">Monthly</string>
+    <string name="payment_frequency_quarterly">Quarterly</string>
+    <string name="payment_frequency_yearly">Yearly</string>
+    <string name="payment_frequency_one_time">One Time</string>
+
+    <string name="payment_frequency_weekly_abbr">wk</string>
+    <string name="payment_frequency_monthly_abbr">mo</string>
+    <string name="payment_frequency_quarterly_abbr">qtr</string>
+    <string name="payment_frequency_yearly_abbr">yr</string>
+    <string name="payment_frequency_one_time_abbr">1x</string>
+
+    <plurals name="overdue_days">
+        <item quantity="one">Overdue by %d day</item>
+        <item quantity="other">Overdue by %d days</item>
+    </plurals>
+    <string name="due_today">Due today</string>
+    <string name="due_tomorrow">Due tomorrow</string>
+    <string name="sort_option_date_asc">Due Date (Sooner First)</string>
+    <string name="sort_option_date_desc">Due Date (Later First)</string>
+    <string name="sort_option_amount_asc">Amount (Low to High)</string>
+    <string name="sort_option_amount_desc">Amount (High to Low)</string>
+    <string name="sort_option_date_asc_label">Earliest</string>
+    <string name="sort_option_date_desc_label">Latest</string>
+    <string name="sort_option_amount_asc_label">Lowest Amount</string>
+    <string name="sort_option_amount_desc_label">Highest Amount</string>
+    <string name="sorting_by">Sorting By</string>
+    <plurals name="days_left">
+        <item quantity="one">%d day left</item>
+        <item quantity="other">%d days left</item>
+    </plurals>
 </resources>
