@@ -1,7 +1,14 @@
 package com.example.billsync.presentation.model
 
-data class FilterOption(
-    val id: String,
-    val label: String,
+sealed interface FilterOption<T> {
     val isSelected: Boolean
-)
+
+    data class All<T>(
+        override val isSelected: Boolean = false
+    ) : FilterOption<T>
+
+    data class Specific<T>(
+        val value: T,
+        override val isSelected: Boolean = false
+    ) : FilterOption<T>
+}

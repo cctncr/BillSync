@@ -25,14 +25,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.billsync.R
+import com.example.billsync.presentation.model.LinearGradientSpacerOrientation
 
 @Composable
 fun TotalBalanceCard(
     totalBalance: String,
-    balanceLabel: String,
-    currencyCode: String,
     avgDailyCost: String,
-    activeSubsCount: String,
+    balanceLabel: String,
+    activeSubsCount: Int,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -46,7 +46,6 @@ fun TotalBalanceCard(
         ) {
             BalanceCardHeader(
                 balanceLabel,
-                currencyCode,
                 totalBalance
             )
 
@@ -65,7 +64,7 @@ fun TotalBalanceCard(
             ) {
                 BalanceCardStatItem(
                     label = stringResource(R.string.avg_daily_cost),
-                    value = "$currencyCode$avgDailyCost"
+                    value = avgDailyCost
                 )
 
                 LinearGradientSpacer(
@@ -76,7 +75,7 @@ fun TotalBalanceCard(
 
                 BalanceCardStatItem(
                     label = stringResource(R.string.active_subs),
-                    value = activeSubsCount
+                    value = activeSubsCount.toString()
                 )
             }
         }
@@ -93,47 +92,42 @@ private fun LinearGradientSpacer(
     val isVertical = orientation == LinearGradientSpacerOrientation.VERTICAL
 
     Spacer(
-        modifier = modifier
-            .then(
-                other = if (isVertical) {
-                    Modifier
-                        .width(thickness)
-                        .fillMaxHeight()
-                } else {
-                    Modifier
-                        .height(thickness)
-                        .fillMaxWidth()
-                }
-            )
-            .drawWithCache {
-                val brush = if (isVertical) {
-                    Brush.verticalGradient(
-                        listOf(
-                            Color.Transparent,
-                            color,
-                            Color.Transparent
-                        )
+        modifier = if (isVertical) {
+            modifier
+                .width(thickness)
+                .fillMaxHeight()
+        } else {
+            modifier
+                .height(thickness)
+                .fillMaxWidth()
+        }.drawWithCache {
+            val brush = if (isVertical) {
+                Brush.verticalGradient(
+                    listOf(
+                        Color.Transparent,
+                        color,
+                        Color.Transparent
                     )
-                } else {
-                    Brush.horizontalGradient(
-                        listOf(
-                            Color.Transparent,
-                            color,
-                            Color.Transparent
-                        )
+                )
+            } else {
+                Brush.horizontalGradient(
+                    listOf(
+                        Color.Transparent,
+                        color,
+                        Color.Transparent
                     )
-                }
-                onDrawBehind {
-                    drawRect(brush)
-                }
+                )
             }
+            onDrawBehind {
+                drawRect(brush)
+            }
+        }
     )
 }
 
 @Composable
 private fun BalanceCardHeader(
     balanceLabel: String,
-    currencyCode: String,
     totalBalance: String,
     modifier: Modifier = Modifier
 ) {
@@ -142,11 +136,11 @@ private fun BalanceCardHeader(
     ) {
         Text(
             text = balanceLabel,
-            color = MaterialTheme.colorScheme.onSurface.copy(0.6f),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
             style = MaterialTheme.typography.titleMedium
         )
         Text(
-            text = "$currencyCode$totalBalance",
+            text = totalBalance,
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
@@ -177,19 +171,13 @@ private fun BalanceCardStatItem(
     }
 }
 
-enum class LinearGradientSpacerOrientation {
-    HORIZONTAL,
-    VERTICAL
-}
-
 @Preview(showBackground = true)
 @Composable
 fun TotalBalanceCard_Preview() {
     TotalBalanceCard(
-        "145.00",
+        "$145.00",
+        "$4.83",
         "TOTAL MONTHLY",
-        "$",
-        "4.83",
-        "12",
+        12
     )
 }
