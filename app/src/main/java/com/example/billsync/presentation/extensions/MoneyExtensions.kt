@@ -6,6 +6,6 @@ import java.util.Locale
 
 fun Money.formatForDisplay(locale: Locale = Locale.getDefault()): String {
     val formatter = NumberFormat.getCurrencyInstance(locale)
-    formatter.currency = this.currencyCode
+    formatter.currency = this.currency
     return formatter.format(this.amount)
 }

@@ -42,6 +42,7 @@
     <string name="sort_option_amount_asc_label">Lowest Amount</string>
     <string name="sort_option_amount_desc_label">Highest Amount</string>
     <string name="sorting_by">Sorting By</string>
+    <string name="default_user_name">Guest</string>
     <plurals name="days_left">
         <item quantity="one">%d day left</item>
         <item quantity="other">%d days left</item>

@@ -8,20 +8,16 @@ import com.example.billsync.presentation.model.FilterOption
 import com.example.billsync.presentation.model.Subscription
 
 data class SubscriptionsUiState(
-    val userName: String = "User",
+    val userName: String? = null,
     val userIcon: ImageVector? = null,
     val greetingText: String = "Welcome back,",
-    val totalBalance: String = String(),
-    val avgDailyCost: String = String(),
+    val totalBalance: String = "",
+    val avgDailyCost: String = "",
     val balanceLabel: String = "Monthly",
     val subscriptions: List<Subscription> = emptyList(),
-    val activeSubCount: Int = -1,
-    val statusFilterOptions: List<FilterOption<BillStatus>> = listOf(
-        FilterOption.All(isSelected = true)
-    ),
-    val frequencyFilterOptions: List<FilterOption<PaymentFrequency>> = listOf(
-        FilterOption.All(isSelected = true)
-    ),
+    val activeSubCount: Int = 0,
+    val statusFilterOptions: List<FilterOption<BillStatus>> = emptyList(),
+    val frequencyFilterOptions: List<FilterOption<PaymentFrequency>> = emptyList(),
     val currentSortOption: BillSortOption = BillSortOption.REVENUE_DATE_ASC,
     val isLoading: Boolean = true,
     val error: String? = null,

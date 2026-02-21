@@ -1,32 +1,36 @@
 package com.example.billsync.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.billsync.data.local.datastore.UserPreferencesDataSource
 import com.example.billsync.domain.extensions.applyFilters
 import com.example.billsync.domain.model.BillSortOption
 import com.example.billsync.domain.model.BillStatus
 import com.example.billsync.domain.model.Filter
-import com.example.billsync.domain.model.Money
 import com.example.billsync.domain.model.PaymentFrequency
-import com.example.billsync.presentation.extensions.formatForDisplay
+import com.example.billsync.domain.repository.SubscriptionRepository
 import com.example.billsync.presentation.mapper.toUi
 import com.example.billsync.presentation.model.FilterOption
 import com.example.billsync.domain.model.Subscription as DomainSubscription
 import com.example.billsync.presentation.state.SubscriptionsUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.util.Currency
-import java.util.Locale
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SubscriptionViewModel : ViewModel() {
+@HiltViewModel
+class SubscriptionViewModel @Inject constructor(
+    private val repository: SubscriptionRepository,
+    private val userPreferencesDataSource: UserPreferencesDataSource
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SubscriptionsUiState())
     val uiState: StateFlow<SubscriptionsUiState> = _uiState.asStateFlow()
 
-    private val allSubscriptions: List<DomainSubscription> = createMockData()
+    private var allSubscriptions: List<DomainSubscription> = emptyList()
 
     private var currentStatusFilter: Filter<BillStatus> = Filter.All()
     private var currentFrequencyFilter: Filter<PaymentFrequency> = Filter.All()
@@ -34,7 +38,25 @@ class SubscriptionViewModel : ViewModel() {
 
     init {
         updateFilterOptions()
-        applyFiltersAndSort()
+        observeSubscriptions()
+        observeUserName()
+    }
+
+    private fun observeSubscriptions() {
+        viewModelScope.launch {
+            repository.getAllSubscriptions().collect { subscriptions ->
+                allSubscriptions = subscriptions
+                applyFiltersAndSort()
+            }
+        }
+    }
+
+    private fun observeUserName() {
+        viewModelScope.launch {
+            userPreferencesDataSource.userName.collect { name ->
+                _uiState.update { it.copy(userName = name) }
+            }
+        }
     }
 
     fun onStatusFilterSelected(option: FilterOption<BillStatus>) {
@@ -118,131 +140,9 @@ class SubscriptionViewModel : ViewModel() {
         _uiState.update { currentState ->
             currentState.copy(
                 subscriptions = filteredSubscriptions,
-                activeSubCount = filteredSubscriptions.size
+                activeSubCount = filteredSubscriptions.size,
+                isLoading = false
             )
         }
-    }
-
-    private fun createMockData(): List<DomainSubscription> = listOf(
-        DomainSubscription(
-            id = "1",
-            brandName = "Netflix",
-            amount = Money(
-                BigDecimal("19.99"),
-                Currency.getInstance(Locale.getDefault())
-            ),
-            dueDate = LocalDate.now().plusDays(5),
-            status = BillStatus.PENDING,
-            paymentFrequency = PaymentFrequency.MONTHLY,
-            brandColorHex = "#E50914",
-            brandIconId = null
-        ),
-        DomainSubscription(
-            id = "2",
-            brandName = "Spotify",
-            amount = Money(
-                BigDecimal("9.99"),
-                Currency.getInstance(Locale.getDefault())
-            ),
-            dueDate = LocalDate.now().plusDays(12),
-            status = BillStatus.PENDING,
-            paymentFrequency = PaymentFrequency.MONTHLY,
-            brandColorHex = "#1DB954",
-            brandIconId = null
-        ),
-        DomainSubscription(
-            id = "3",
-            brandName = "Amazon Prime",
-            amount = Money(
-                BigDecimal("14.99"),
-                Currency.getInstance(Locale.getDefault())
-            ),
-            dueDate = LocalDate.now().minusDays(2),
-            status = BillStatus.OVERDUE,
-            paymentFrequency = PaymentFrequency.MONTHLY,
-            brandColorHex = "#FF9900",
-            brandIconId = null
-        ),
-        DomainSubscription(
-            id = "4",
-            brandName = "YouTube Premium",
-            amount = Money(
-                BigDecimal("11.99"),
-                Currency.getInstance(Locale.getDefault())
-            ),
-            dueDate = LocalDate.now(),
-            status = BillStatus.PENDING,
-            paymentFrequency = PaymentFrequency.MONTHLY,
-            brandColorHex = "#FF0000",
-            brandIconId = null
-        ),
-        DomainSubscription(
-            id = "5",
-            brandName = "Adobe Creative Cloud",
-            amount = Money(
-                BigDecimal("54.99"),
-                Currency.getInstance(Locale.getDefault())
-            ),
-            dueDate = LocalDate.now().minusDays(10),
-            status = BillStatus.OVERDUE,
-            paymentFrequency = PaymentFrequency.MONTHLY,
-            brandColorHex = "#FF0000",
-            brandIconId = null
-        ),
-        DomainSubscription(
-            id = "6",
-            brandName = "GitHub Pro",
-            amount = Money(
-                BigDecimal("7.00"),
-                Currency.getInstance(Locale.getDefault())
-            ),
-            dueDate = LocalDate.now().plusDays(20),
-            status = BillStatus.PENDING,
-            paymentFrequency = PaymentFrequency.MONTHLY,
-            brandColorHex = "#181717",
-            brandIconId = null
-        ),
-        DomainSubscription(
-            id = "7",
-            brandName = "Apple Music",
-            amount = Money(
-                BigDecimal("9.99"),
-                Currency.getInstance(Locale.getDefault())
-            ),
-            dueDate = LocalDate.now().plusDays(7),
-            status = BillStatus.PENDING,
-            paymentFrequency = PaymentFrequency.WEEKLY,
-            brandColorHex = "#FA243C",
-            brandIconId = null
-        ),
-        DomainSubscription(
-            id = "8",
-            brandName = "Dropbox Plus",
-            amount = Money(
-                BigDecimal("11.99"),
-                Currency.getInstance(Locale.getDefault())
-            ),
-            dueDate = LocalDate.now().plusDays(60),
-            status = BillStatus.PENDING,
-            paymentFrequency = PaymentFrequency.YEARLY,
-            brandColorHex = "#0061FF",
-            brandIconId = null
-        )
-    ).also { subscriptions ->
-        _uiState.value = SubscriptionsUiState(
-            userName = "Alex Adams",
-            userIcon = null,
-            totalBalance = Money(
-                amount = BigDecimal("80.49"),
-                currencyCode = Currency.getInstance(Locale.getDefault())
-            ).formatForDisplay(),
-            avgDailyCost = Money(
-                amount = BigDecimal("4.90"),
-                currencyCode = Currency.getInstance(Locale.getDefault())
-            ).formatForDisplay(),
-            subscriptions = subscriptions.map { it.toUi() },
-            isLoading = false,
-            error = null
-        )
     }
 }

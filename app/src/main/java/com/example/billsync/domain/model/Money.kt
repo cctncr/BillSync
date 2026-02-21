@@ -5,7 +5,7 @@ import java.util.Currency
 
 data class Money(
     val amount: BigDecimal,
-    val currencyCode: Currency
+    val currency: Currency
 ) {
     init {
         require(amount >= BigDecimal.ZERO) { "Amount can not be negative" }
