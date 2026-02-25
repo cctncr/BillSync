@@ -32,7 +32,10 @@ fun SetUpNavHost(navController: NavHostController) {
 
         composable<SubscriptionDetail> { entry ->
             val subscriptionDetail = entry.toRoute<SubscriptionDetail>()
-            SubscriptionDetailScreen(subscriptionID = subscriptionDetail.subscriptionID)
+            SubscriptionDetailScreen(
+                subscriptionId = subscriptionDetail.subscriptionId,
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
 
         composable<CreateSubscription> {

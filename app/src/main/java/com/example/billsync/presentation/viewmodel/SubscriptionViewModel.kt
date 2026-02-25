@@ -1,6 +1,5 @@
 package com.example.billsync.presentation.viewmodel
 
-import android.icu.number.Precision.currency
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.billsync.domain.extensions.applyFilters

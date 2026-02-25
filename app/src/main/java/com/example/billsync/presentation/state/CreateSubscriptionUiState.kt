@@ -17,6 +17,10 @@ data class CreateSubscriptionUiState(
     val brandColorHex: String = "#9E9E9E",
     val brandIconId: String? = null,
     val isLoading: Boolean = false,
-    val isSaved: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val navigationEvent: CreateSubscriptionNavigationEvent? = null
 )
+
+sealed class CreateSubscriptionNavigationEvent {
+    data object NavigateBack : CreateSubscriptionNavigationEvent()
+}

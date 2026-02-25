@@ -9,6 +9,7 @@ import com.example.billsync.domain.model.Subscription
 import com.example.billsync.domain.repository.UserPreferencesRepository
 import com.example.billsync.domain.usecase.SaveSubscriptionUseCase
 import com.example.billsync.presentation.model.BRAND_COLORS
+import com.example.billsync.presentation.state.CreateSubscriptionNavigationEvent
 import com.example.billsync.presentation.state.CreateSubscriptionUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -118,10 +119,23 @@ class CreateSubscriptionViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
                 saveSubscriptionUseCase(subscription)
-                _uiState.update { it.copy(isLoading = false, isSaved = true) }
+                _uiState.update {
+                    it.copy(
+                        navigationEvent = CreateSubscriptionNavigationEvent.NavigateBack
+                    )
+                }
             } catch (_: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = "Failed to save") } // TODO: Hardcoded String
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Failed to save"
+                    )
+                } // TODO: Hardcoded String
             }
         }
+    }
+
+    fun onNavigationEventConsumed() {
+        _uiState.update { it.copy(navigationEvent = null) }
     }
 }

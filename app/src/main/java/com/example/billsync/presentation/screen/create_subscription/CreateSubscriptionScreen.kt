@@ -41,6 +41,7 @@ import com.example.billsync.presentation.screen.create_subscription.components.C
 import com.example.billsync.presentation.screen.create_subscription.components.DueDateField
 import com.example.billsync.presentation.screen.create_subscription.components.FrequencySelector
 import com.example.billsync.presentation.screen.create_subscription.components.StatusSelector
+import com.example.billsync.presentation.state.CreateSubscriptionNavigationEvent
 import com.example.billsync.presentation.state.CreateSubscriptionUiState
 import com.example.billsync.presentation.viewmodel.CreateSubscriptionViewModel
 import java.time.LocalDate
@@ -53,8 +54,14 @@ fun CreateSubscriptionScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(uiState.isSaved) {
-        if (uiState.isSaved) onNavigateBack()
+    LaunchedEffect(uiState.navigationEvent) {
+        when (uiState.navigationEvent) {
+            CreateSubscriptionNavigationEvent.NavigateBack -> {
+                onNavigateBack()
+                viewModel.onNavigationEventConsumed()
+            }
+            null -> Unit
+        }
     }
 
     CreateSubscriptionContent(
