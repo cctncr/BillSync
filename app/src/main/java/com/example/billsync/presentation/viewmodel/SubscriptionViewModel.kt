@@ -1,14 +1,18 @@
 package com.example.billsync.presentation.viewmodel
 
+import android.icu.number.Precision.currency
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.billsync.data.local.datastore.UserPreferencesDataSource
 import com.example.billsync.domain.extensions.applyFilters
+import com.example.billsync.domain.extensions.monthlyNormalizedAmount
 import com.example.billsync.domain.model.BillSortOption
 import com.example.billsync.domain.model.BillStatus
 import com.example.billsync.domain.model.Filter
+import com.example.billsync.domain.model.Money
 import com.example.billsync.domain.model.PaymentFrequency
 import com.example.billsync.domain.repository.SubscriptionRepository
+import com.example.billsync.domain.repository.UserPreferencesRepository
+import com.example.billsync.presentation.extensions.formatForDisplay
 import com.example.billsync.presentation.mapper.toUi
 import com.example.billsync.presentation.model.FilterOption
 import com.example.billsync.domain.model.Subscription as DomainSubscription
@@ -19,12 +23,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
+import java.math.RoundingMode
 import javax.inject.Inject
 
 @HiltViewModel
 class SubscriptionViewModel @Inject constructor(
     private val repository: SubscriptionRepository,
-    private val userPreferencesDataSource: UserPreferencesDataSource
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SubscriptionsUiState())
@@ -46,14 +52,42 @@ class SubscriptionViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getAllSubscriptions().collect { subscriptions ->
                 allSubscriptions = subscriptions
+                calculateStats(subscriptions)
                 applyFiltersAndSort()
             }
         }
     }
 
+    private fun calculateStats(subscriptions: List<DomainSubscription>) {
+        if (subscriptions.isEmpty()) {
+            _uiState.update { it.copy(totalBalance = "", avgDailyCost = "") }
+            return
+        }
+
+        // TODO: Add Multi-currency support somehow
+        val currencies = subscriptions.map { it.amount.currency }.toSet()
+        if (currencies.size > 1) {
+            _uiState.update { it.copy(totalBalance = "", avgDailyCost = "") }
+            return
+        }
+        val currency = currencies.first()
+        val totalMonthly = subscriptions.sumOf { it.monthlyNormalizedAmount() }
+        val avgDaily = totalMonthly
+            .divide(BigDecimal("30.44"), 2, RoundingMode.HALF_UP)
+        val totalMoney = Money(totalMonthly, currency)
+        val avgMoney = Money(avgDaily, currency)
+
+        _uiState.update {
+            it.copy(
+                totalBalance = totalMoney.formatForDisplay(),
+                avgDailyCost = avgMoney.formatForDisplay()
+            )
+        }
+    }
+
     private fun observeUserName() {
         viewModelScope.launch {
-            userPreferencesDataSource.userName.collect { name ->
+            userPreferencesRepository.userName.collect { name ->
                 _uiState.update { it.copy(userName = name) }
             }
         }

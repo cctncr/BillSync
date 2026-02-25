@@ -10,10 +10,8 @@ import com.example.billsync.presentation.model.Subscription
 data class SubscriptionsUiState(
     val userName: String? = null,
     val userIcon: ImageVector? = null,
-    val greetingText: String = "Welcome back,",
     val totalBalance: String = "",
     val avgDailyCost: String = "",
-    val balanceLabel: String = "Monthly",
     val subscriptions: List<Subscription> = emptyList(),
     val activeSubCount: Int = 0,
     val statusFilterOptions: List<FilterOption<BillStatus>> = emptyList(),

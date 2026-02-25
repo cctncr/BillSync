@@ -5,10 +5,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.example.billsync.presentation.navigation.route.CreateSubscription
 import com.example.billsync.presentation.navigation.route.Subscription
 import com.example.billsync.presentation.navigation.route.SubscriptionDetail
-import com.example.billsync.presentation.screen.SubscriptionDetailScreen
-import com.example.billsync.presentation.screen.SubscriptionScreen
+import com.example.billsync.presentation.screen.create_subscription.CreateSubscriptionScreen
+import com.example.billsync.presentation.screen.subscription_detail.SubscriptionDetailScreen
+import com.example.billsync.presentation.screen.subscriptions.SubscriptionScreen
 
 @Composable
 fun SetUpNavHost(navController: NavHostController) {
@@ -21,6 +23,9 @@ fun SetUpNavHost(navController: NavHostController) {
             SubscriptionScreen(
                 onSubscriptionCardClick = { subscriptionID ->
                     navController.navigate(SubscriptionDetail(subscriptionID))
+                },
+                onAddClick = {
+                    navController.navigate(CreateSubscription)
                 }
             )
         }
@@ -28,6 +33,12 @@ fun SetUpNavHost(navController: NavHostController) {
         composable<SubscriptionDetail> { entry ->
             val subscriptionDetail = entry.toRoute<SubscriptionDetail>()
             SubscriptionDetailScreen(subscriptionID = subscriptionDetail.subscriptionID)
+        }
+
+        composable<CreateSubscription> {
+            CreateSubscriptionScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
     }
 }

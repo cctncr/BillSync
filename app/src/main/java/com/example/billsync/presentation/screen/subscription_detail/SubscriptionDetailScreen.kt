@@ -1,4 +1,4 @@
-package com.example.billsync.presentation.screen
+package com.example.billsync.presentation.screen.subscription_detail
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

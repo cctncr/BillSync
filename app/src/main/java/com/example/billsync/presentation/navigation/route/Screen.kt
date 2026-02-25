@@ -7,3 +7,6 @@ data object Subscription
 
 @Serializable
 data class SubscriptionDetail(val subscriptionID: String)
+
+@Serializable
+data object CreateSubscription

@@ -1,4 +1,4 @@
-package com.example.billsync.presentation.components
+package com.example.billsync.presentation.screen.subscriptions.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.billsync.R
+import com.example.billsync.presentation.common_components.CircularIconContainer
 
 @Composable
 fun ProfileCard(
