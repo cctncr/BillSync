@@ -26,6 +26,7 @@ import com.example.billsync.presentation.viewmodel.SubscriptionDetailViewModel
 fun SubscriptionDetailScreen(
     subscriptionId: String,
     onNavigateBack: () -> Unit,
+    onNavigateToEdit: (String) -> Unit,
     viewModel: SubscriptionDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -63,6 +64,13 @@ fun SubscriptionDetailScreen(
 
                 uiState.error?.let {
                     Text(text = it, color = MaterialTheme.colorScheme.error)
+                }
+
+                Button(
+                    onClick = { onNavigateToEdit(subscriptionId) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Edit") // TODO: Hardcoded str
                 }
 
                 Button(

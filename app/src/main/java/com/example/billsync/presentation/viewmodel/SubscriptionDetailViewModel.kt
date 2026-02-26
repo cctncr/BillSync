@@ -36,16 +36,17 @@ class SubscriptionDetailViewModel @Inject constructor(
 
     private fun loadSubscription() {
         viewModelScope.launch {
-            val result = repository.getSubscriptionById(subscriptionId)
-            if (result == null) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        error = "Subscription not found"
-                    )
-                } // TODO: Hardcoded String
-            } else {
-                _uiState.update { it.copy(isLoading = false, subscription = result.toUi()) }
+            repository.observeSubscriptionById(subscriptionId).collect { subscription ->
+                if (subscription == null) {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Subscription not found"
+                        )
+                    } // TODO: Hardcoded String
+                } else {
+                    _uiState.update { it.copy(isLoading = false, subscription = subscription.toUi()) }
+                }
             }
         }
     }

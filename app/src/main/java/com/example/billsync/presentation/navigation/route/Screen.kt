@@ -10,3 +10,6 @@ data class SubscriptionDetail(val subscriptionId: String)
 
 @Serializable
 data object CreateSubscription
+
+@Serializable
+data class EditSubscription(val subscriptionId: String)
