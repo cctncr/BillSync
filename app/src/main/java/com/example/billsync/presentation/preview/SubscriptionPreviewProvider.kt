@@ -20,10 +20,8 @@ class SubscriptionPreviewProvider : PreviewParameterProvider<SubscriptionsUiStat
     companion object {
         val withData = SubscriptionsUiState(
             userName = "Alex Adams",
-            greetingText = "Welcome back,",
             totalBalance = "$80.49",
             avgDailyCost = "$4.90/day",
-            balanceLabel = "Monthly",
             activeSubCount = 4,
             isLoading = false,
             currentSortOption = BillSortOption.REVENUE_DATE_ASC,
@@ -88,10 +86,8 @@ class SubscriptionPreviewProvider : PreviewParameterProvider<SubscriptionsUiStat
 
         val empty = SubscriptionsUiState(
             userName = "Alex Adams",
-            greetingText = "Welcome back,",
             totalBalance = "$0.00",
             avgDailyCost = "$0.00/day",
-            balanceLabel = "Monthly",
             activeSubCount = 0,
             isLoading = false,
             subscriptions = emptyList()

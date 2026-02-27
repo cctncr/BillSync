@@ -16,6 +16,9 @@ interface SubscriptionDao {
     @Query("SELECT * FROM subscriptions WHERE id = :id")
     suspend fun getSubscriptionById(id: String): SubscriptionEntity?
 
+    @Query("SELECT * FROM subscriptions WHERE id = :id")
+    fun observeSubscriptionById(id: String): Flow<SubscriptionEntity?>
+
     @Upsert
     suspend fun upsertSubscription(entity: SubscriptionEntity)
 

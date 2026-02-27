@@ -1,4 +1,4 @@
-package com.example.billsync.presentation.components
+package com.example.billsync.presentation.screen.subscriptions.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement

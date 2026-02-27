@@ -6,4 +6,10 @@ import kotlinx.serialization.Serializable
 data object Subscription
 
 @Serializable
-data class SubscriptionDetail(val subscriptionID: String)
+data class SubscriptionDetail(val subscriptionId: String)
+
+@Serializable
+data object CreateSubscription
+
+@Serializable
+data class EditSubscription(val subscriptionId: String)

@@ -8,7 +8,7 @@ data class SubscriptionEntity(
     @PrimaryKey
     val id: String,
     val brandName: String,
-    val amountValue: Double,
+    val amountValue: String,
     val currencyCode: String,
     val dueDateEpochDay: Long,
     val status: String,

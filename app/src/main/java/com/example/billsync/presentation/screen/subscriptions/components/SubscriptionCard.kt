@@ -1,4 +1,4 @@
-package com.example.billsync.presentation.components
+package com.example.billsync.presentation.screen.subscriptions.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.billsync.R
 import com.example.billsync.domain.model.BillStatus
 import com.example.billsync.domain.model.PaymentFrequency
+import com.example.billsync.presentation.common_components.CircularIconContainer
 import com.example.billsync.presentation.extensions.getStatusColor
 import com.example.billsync.presentation.extensions.toAbbreviation
 import com.example.billsync.presentation.extensions.toDisplayName
