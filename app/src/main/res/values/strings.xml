@@ -37,6 +37,10 @@
     <string name="amount_label">Amount</string>
     <string name="save">Save</string>
 
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_profile">Profile</string>
+    <string name="settings_name_label">Your name</string>
+
     <plurals name="overdue_days">
         <item quantity="one">Overdue by %d day</item>
         <item quantity="other">Overdue by %d days</item>

@@ -43,7 +43,8 @@ import com.example.billsync.presentation.viewmodel.SubscriptionViewModel
 fun SubscriptionScreen(
     viewModel: SubscriptionViewModel = hiltViewModel(),
     onSubscriptionCardClick: (String) -> Unit,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    onProfileCardClick: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -53,7 +54,8 @@ fun SubscriptionScreen(
         onStatusFilterSelected = viewModel::onStatusFilterSelected,
         onFrequencyFilterSelected = viewModel::onFrequencyFilterSelected,
         onSortOptionSelected = viewModel::onSortOptionSelected,
-        onAddClick = onAddClick
+        onAddClick = onAddClick,
+        onProfileCardClick = onProfileCardClick
     )
 }
 
@@ -64,7 +66,8 @@ private fun SubscriptionContent(
     onStatusFilterSelected: (FilterOption<BillStatus>) -> Unit,
     onFrequencyFilterSelected: (FilterOption<PaymentFrequency>) -> Unit,
     onSortOptionSelected: (BillSortOption) -> Unit,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    onProfileCardClick: () -> Unit
 ) {
     val listState = rememberLazyListState()
     val isExpanded by remember { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
@@ -96,6 +99,7 @@ private fun SubscriptionContent(
             item {
                 ProfileCard(
                     fullName = uiState.userName ?: stringResource(R.string.default_user_name),
+                    onClick = onProfileCardClick,
                     profileIcon = uiState.userIcon,
                     greeting = stringResource(R.string.greeting_welcome_back),
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -157,6 +161,7 @@ fun SubscriptionContent_Preview(
         onStatusFilterSelected = { },
         onFrequencyFilterSelected = { },
         onSortOptionSelected = { },
-        onAddClick = { }
+        onAddClick = { },
+        onProfileCardClick = { }
     )
 }

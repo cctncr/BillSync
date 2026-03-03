@@ -1,5 +1,6 @@
 package com.example.billsync.presentation.screen.subscriptions.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import com.example.billsync.presentation.common_components.CircularIconContainer
 @Composable
 fun ProfileCard(
     fullName: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     profileIcon: ImageVector? = null,
     greeting: String = stringResource(R.string.greeting_welcome_back),
@@ -31,6 +33,8 @@ fun ProfileCard(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
     ) {
         CircularIconContainer(
             icon = profileIcon ?: Icons.Default.Person,
@@ -62,6 +66,7 @@ fun ProfileCard(
 fun ProfileCard_Preview() {
     ProfileCard(
         fullName = "Alex Morgan",
+        onClick = { },
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
