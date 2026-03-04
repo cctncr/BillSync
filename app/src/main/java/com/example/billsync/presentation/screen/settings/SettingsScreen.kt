@@ -18,20 +18,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.billsync.R
+import com.example.billsync.presentation.common_components.CurrencyPickerBottomSheet
+import com.example.billsync.presentation.preview.SettingsPreviewProvider
+import com.example.billsync.presentation.screen.settings.components.DefaultCurrencyRow
+import com.example.billsync.presentation.screen.settings.components.SettingsSectionHeader
 import com.example.billsync.presentation.state.SettingsNavigationEvent
 import com.example.billsync.presentation.state.SettingsUiState
 import com.example.billsync.presentation.viewmodel.SettingsViewModel
+import java.util.Currency
 
 @Composable
 fun SettingsScreen(
@@ -55,6 +66,8 @@ fun SettingsScreen(
         uiState = uiState,
         onNavigateBack = onNavigateBack,
         onUserNameChange = viewModel::onUserNameChange,
+        onCurrencySelected = viewModel::onCurrencySelected,
+        onClearCurrency = viewModel::onClearCurrency,
         onSave = viewModel::onSave
     )
 }
@@ -65,8 +78,12 @@ private fun SettingsContent(
     uiState: SettingsUiState,
     onNavigateBack: () -> Unit,
     onUserNameChange: (String) -> Unit,
+    onCurrencySelected: (Currency) -> Unit,
+    onClearCurrency: () -> Unit,
     onSave: () -> Unit
 ) {
+    var showCurrencyPicker by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -111,6 +128,24 @@ private fun SettingsContent(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            SettingsSectionHeader(title = stringResource(R.string.settings_section_preferences))
+
+            DefaultCurrencyRow(
+                label = stringResource(R.string.settings_default_currency_label),
+                currency = uiState.selectedCurrency,
+                notSetText = stringResource(R.string.settings_default_currency_not_set),
+                onClick = { showCurrencyPicker = true }
+            )
+
+            if (uiState.selectedCurrency != null) {
+                TextButton(
+                    onClick = onClearCurrency,
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text(stringResource(R.string.settings_reset_to_auto))
+                }
+            }
+
             uiState.error?.let { errorMessage ->
                 Text(
                     text = errorMessage,
@@ -127,17 +162,27 @@ private fun SettingsContent(
             }
         }
     }
+
+    if (showCurrencyPicker) {
+        CurrencyPickerBottomSheet(
+            currencies = uiState.availableCurrencies,
+            onCurrencySelected = onCurrencySelected,
+            onDismiss = { showCurrencyPicker = false }
+        )
+    }
 }
 
+@Preview(showBackground = true)
 @Composable
-private fun SettingsSectionHeader(
-    title: String,
-    modifier: Modifier = Modifier
+private fun SettingsContent_Preview(
+    @PreviewParameter(SettingsPreviewProvider::class) uiState: SettingsUiState
 ) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = modifier.padding(top = 8.dp)
+    SettingsContent(
+        uiState = uiState,
+        onNavigateBack = { },
+        onUserNameChange = { },
+        onCurrencySelected = { },
+        onClearCurrency = { },
+        onSave = { }
     )
 }

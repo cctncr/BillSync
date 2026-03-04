@@ -37,7 +37,7 @@ import com.example.billsync.presentation.preview.CreateSubscriptionPreviewProvid
 import com.example.billsync.presentation.screen.create_subscription.components.AmountSelectionCard
 import com.example.billsync.presentation.screen.create_subscription.components.BrandColorPicker
 import com.example.billsync.presentation.screen.create_subscription.components.BrandNameField
-import com.example.billsync.presentation.screen.create_subscription.components.CurrencyPickerBottomSheet
+import com.example.billsync.presentation.common_components.CurrencyPickerBottomSheet
 import com.example.billsync.presentation.screen.create_subscription.components.DueDateField
 import com.example.billsync.presentation.screen.create_subscription.components.FrequencySelector
 import com.example.billsync.presentation.screen.create_subscription.components.StatusSelector

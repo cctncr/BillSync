@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -36,18 +37,20 @@ class CreateSubscriptionViewModel @Inject constructor(
     init {
         loadAvailableCurrencies()
         loadAvailableBrandColors()
-        observeDefaultCurrency()
+        loadInitialCurrency()
     }
 
-    private fun observeDefaultCurrency() {
+    private fun loadInitialCurrency() {
         viewModelScope.launch {
-            userPreferencesRepository.defaultCurrencyCode.collect { code ->
-                val currency = code?.let { Currency.getInstance(it) }
-                    ?: runCatching { Currency.getInstance(Locale.getDefault()) }
-                        .getOrElse { Currency.getInstance("USD") }
+            val userDefault = userPreferencesRepository.userDefaultCurrencyCode.first()
+            val lastUsed = userPreferencesRepository.lastUsedCurrencyCode.first()
+            val code = userDefault ?: lastUsed
+            val currency = code?.let {
+                runCatching { Currency.getInstance(it) }.getOrNull()
+            } ?: runCatching { Currency.getInstance(Locale.getDefault()) }
+                .getOrElse { Currency.getInstance("USD") }
 
-                _uiState.update { it.copy(selectedCurrency = currency) }
-            }
+            _uiState.update { it.copy(selectedCurrency = currency) }
         }
     }
 

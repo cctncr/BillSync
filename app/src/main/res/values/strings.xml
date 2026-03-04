@@ -40,6 +40,11 @@
     <string name="settings_title">Settings</string>
     <string name="settings_section_profile">Profile</string>
     <string name="settings_name_label">Your name</string>
+    <string name="settings_section_preferences">Preferences</string>
+    <string name="settings_default_currency_label">Default currency</string>
+    <string name="settings_default_currency_not_set">Auto (last used)</string>
+    <string name="currency_search_hint">Search currency</string>
+    <string name="settings_reset_to_auto">Reset to auto</string>
 
     <plurals name="overdue_days">
         <item quantity="one">Overdue by %d day</item>
