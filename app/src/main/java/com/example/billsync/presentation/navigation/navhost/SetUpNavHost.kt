@@ -7,10 +7,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.billsync.presentation.navigation.route.CreateSubscription
 import com.example.billsync.presentation.navigation.route.EditSubscription
+import com.example.billsync.presentation.navigation.route.Settings
 import com.example.billsync.presentation.navigation.route.Subscription
 import com.example.billsync.presentation.navigation.route.SubscriptionDetail
 import com.example.billsync.presentation.screen.create_subscription.CreateSubscriptionScreen
 import com.example.billsync.presentation.screen.edit_subscription.EditSubscriptionScreen
+import com.example.billsync.presentation.screen.settings.SettingsScreen
 import com.example.billsync.presentation.screen.subscription_detail.SubscriptionDetailScreen
 import com.example.billsync.presentation.screen.subscriptions.SubscriptionScreen
 
@@ -28,7 +30,10 @@ fun SetUpNavHost(navController: NavHostController) {
                 },
                 onAddClick = {
                     navController.navigate(CreateSubscription)
-                }
+                },
+                onProfileCardClick = {
+                    navController.navigate(Settings)
+                },
             )
         }
 
@@ -51,6 +56,12 @@ fun SetUpNavHost(navController: NavHostController) {
 
         composable<EditSubscription> {
             EditSubscriptionScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Settings> {
+            SettingsScreen(
                 onNavigateBack = { navController.popBackStack() }
             )
         }

@@ -14,15 +14,20 @@ class UserPreferencesDataSource @Inject constructor(
 ) : UserPreferencesRepository {
     private companion object {
         val USER_NAME = stringPreferencesKey("user_name")
-        val DEFAULT_CURRENCY_CODE = stringPreferencesKey("default_currency_code")
+        val LAST_USED_CURRENCY_CODE = stringPreferencesKey("last_used_currency_code")
+        val USER_DEFAULT_CURRENCY_CODE = stringPreferencesKey("user_default_currency_code")
     }
 
     override val userName: Flow<String?> = dataStore.data.map { preferences ->
         preferences[USER_NAME]
     }
 
-    override val defaultCurrencyCode: Flow<String?> = dataStore.data.map { preferences ->
-        preferences[DEFAULT_CURRENCY_CODE]
+    override val lastUsedCurrencyCode: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[LAST_USED_CURRENCY_CODE]
+    }
+
+    override val userDefaultCurrencyCode: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[USER_DEFAULT_CURRENCY_CODE]
     }
 
     override suspend fun setUserName(name: String) {
@@ -31,9 +36,21 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    override suspend fun setDefaultCurrency(currencyCode: String) {
+    override suspend fun setLastUsedCurrency(currencyCode: String) {
         dataStore.edit { preferences ->
-            preferences[DEFAULT_CURRENCY_CODE] = currencyCode
+            preferences[LAST_USED_CURRENCY_CODE] = currencyCode
+        }
+    }
+
+    override suspend fun setUserDefaultCurrency(currencyCode: String) {
+        dataStore.edit { preferences ->
+            preferences[USER_DEFAULT_CURRENCY_CODE] = currencyCode
+        }
+    }
+
+    override suspend fun clearUserDefaultCurrency() {
+        dataStore.edit { preferences ->
+            preferences.remove(USER_DEFAULT_CURRENCY_CODE)
         }
     }
 }

@@ -11,6 +11,6 @@ class UpdateSubscriptionUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(subscription: Subscription) {
         repository.updateSubscription(subscription)
-        userPreferencesRepository.setDefaultCurrency(subscription.amount.currency.currencyCode)
+        userPreferencesRepository.setLastUsedCurrency(subscription.amount.currency.currencyCode)
     }
 }

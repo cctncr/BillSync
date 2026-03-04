@@ -13,3 +13,6 @@ data object CreateSubscription
 
 @Serializable
 data class EditSubscription(val subscriptionId: String)
+
+@Serializable
+data object Settings
