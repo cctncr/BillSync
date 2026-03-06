@@ -127,11 +127,11 @@ class CreateSubscriptionViewModel @Inject constructor(
                         navigationEvent = CreateSubscriptionNavigationEvent.NavigateBack
                     )
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        error = "Failed to save"
+                        error = e.message ?: "Failed to save"
                     )
                 } // TODO: Hardcoded String
             }

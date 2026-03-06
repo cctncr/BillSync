@@ -10,15 +10,20 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.billsync.R
+import com.example.billsync.domain.model.BillStatus
+import com.example.billsync.domain.model.PaymentFrequency
 import com.example.billsync.presentation.state.SubscriptionDetailNavigationEvent
 import com.example.billsync.presentation.viewmodel.SubscriptionDetailViewModel
 
@@ -29,7 +34,7 @@ fun SubscriptionDetailScreen(
     onNavigateToEdit: (String) -> Unit,
     viewModel: SubscriptionDetailViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState.navigationEvent) {
         when (uiState.navigationEvent) {
@@ -49,38 +54,60 @@ fun SubscriptionDetailScreen(
         when {
             uiState.isLoading -> CircularProgressIndicator()
 
-            uiState.subscription != null -> Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = uiState.subscription!!.brandName,
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                Text(text = uiState.subscription!!.displayAmount)
-                Text(text = uiState.subscription!!.dueDate.toString())
+            uiState.subscription != null -> {
+                val subscription = uiState.subscription!!
 
-                uiState.error?.let {
-                    Text(text = it, color = MaterialTheme.colorScheme.error)
-                }
-
-                Button(
-                    onClick = { onNavigateToEdit(subscriptionId) },
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text("Edit") // TODO: Hardcoded str
-                }
+                    Text(
+                        text = subscription.brandName,
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    Text(text = subscription.displayAmount)
+                    Text(text = subscription.dueDate.toString())
 
-                Button(
-                    onClick = viewModel::onDelete,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Delete") // TODO: Hardcoded str
+                    uiState.error?.let {
+                        Text(text = it, color = MaterialTheme.colorScheme.error)
+                    }
+
+                    if (subscription.status != BillStatus.PAID) {
+                        Button(
+                            onClick = viewModel::onMarkAsPaid,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(stringResource(R.string.mark_as_paid))
+                        }
+
+                        if (subscription.paymentFrequency != PaymentFrequency.ONE_TIME) {
+                            OutlinedButton(
+                                onClick = viewModel::onSkipCycle,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(stringResource(R.string.skip_cycle))
+                            }
+                        }
+                    }
+
+                    Button(
+                        onClick = { onNavigateToEdit(subscriptionId) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(stringResource(R.string.edit))
+                    }
+
+                    Button(
+                        onClick = viewModel::onDelete,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(stringResource(R.string.delete))
+                    }
                 }
             }
 

@@ -3,11 +3,11 @@ package com.example.billsync.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.billsync.domain.extensions.applyFilters
-import com.example.billsync.domain.extensions.monthlyNormalizedAmount
+import com.example.billsync.domain.extensions.averageDailyCost
+import com.example.billsync.domain.extensions.totalMonthlyCost
 import com.example.billsync.domain.model.BillSortOption
 import com.example.billsync.domain.model.BillStatus
 import com.example.billsync.domain.model.Filter
-import com.example.billsync.domain.model.Money
 import com.example.billsync.domain.model.PaymentFrequency
 import com.example.billsync.domain.repository.SubscriptionRepository
 import com.example.billsync.domain.repository.UserPreferencesRepository
@@ -22,8 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
-import java.math.RoundingMode
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,28 +57,10 @@ class SubscriptionViewModel @Inject constructor(
     }
 
     private fun calculateStats(subscriptions: List<DomainSubscription>) {
-        if (subscriptions.isEmpty()) {
-            _uiState.update { it.copy(totalBalance = "", avgDailyCost = "") }
-            return
-        }
-
-        // TODO: Add Multi-currency support somehow
-        val currencies = subscriptions.map { it.amount.currency }.toSet()
-        if (currencies.size > 1) {
-            _uiState.update { it.copy(totalBalance = "", avgDailyCost = "") }
-            return
-        }
-        val currency = currencies.first()
-        val totalMonthly = subscriptions.sumOf { it.monthlyNormalizedAmount() }
-        val avgDaily = totalMonthly
-            .divide(BigDecimal("30.44"), 2, RoundingMode.HALF_UP)
-        val totalMoney = Money(totalMonthly, currency)
-        val avgMoney = Money(avgDaily, currency)
-
         _uiState.update {
             it.copy(
-                totalBalance = totalMoney.formatForDisplay(),
-                avgDailyCost = avgMoney.formatForDisplay()
+                totalBalance = subscriptions.totalMonthlyCost()?.formatForDisplay() ?: "",
+                avgDailyCost = subscriptions.averageDailyCost()?.formatForDisplay() ?: ""
             )
         }
     }
@@ -165,7 +146,8 @@ class SubscriptionViewModel @Inject constructor(
         val filteredSubscriptions = allSubscriptions
             .applyFilters(
                 statusFilter = currentStatusFilter,
-                frequencyFilter = currentFrequencyFilter
+                frequencyFilter = currentFrequencyFilter,
+                currentDate = LocalDate.now()
             )
             .let { list -> sortSubscriptions(list, currentSortOption) }
             .map { it.toUi() }

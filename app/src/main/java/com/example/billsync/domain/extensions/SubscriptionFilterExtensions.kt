@@ -4,12 +4,14 @@ import com.example.billsync.domain.model.BillStatus
 import com.example.billsync.domain.model.Filter
 import com.example.billsync.domain.model.PaymentFrequency
 import com.example.billsync.domain.model.Subscription
+import java.time.LocalDate
 
 fun List<Subscription>.applyStatusFilter(
-    filter: Filter<BillStatus>
+    filter: Filter<BillStatus>,
+    currentDate: LocalDate
 ): List<Subscription> = when (filter) {
     is Filter.All -> this
-    is Filter.Specific -> this.filter { it.status == filter.value }
+    is Filter.Specific -> this.filter { it.effectiveStatus(currentDate) == filter.value }
 }
 
 fun List<Subscription>.applyFrequencyFilter(
@@ -21,7 +23,8 @@ fun List<Subscription>.applyFrequencyFilter(
 
 fun List<Subscription>.applyFilters(
     statusFilter: Filter<BillStatus>,
-    frequencyFilter: Filter<PaymentFrequency>
+    frequencyFilter: Filter<PaymentFrequency>,
+    currentDate: LocalDate
 ): List<Subscription> =
-    this.applyStatusFilter(statusFilter)
+    this.applyStatusFilter(statusFilter, currentDate)
         .applyFrequencyFilter(frequencyFilter)

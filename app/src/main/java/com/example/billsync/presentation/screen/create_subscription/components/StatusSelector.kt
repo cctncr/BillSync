@@ -29,7 +29,7 @@ fun StatusSelector(
         )
 
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            BillStatus.entries.forEach { status ->
+            BillStatus.selectableValues.forEach { status ->
                 FilterChip(
                     selected = status == selectedStatus,
                     onClick = { onStatusSelected(status) },
