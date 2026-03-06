@@ -37,6 +37,11 @@
     <string name="amount_label">Amount</string>
     <string name="save">Save</string>
 
+    <string name="mark_as_paid">Mark as Paid</string>
+    <string name="skip_cycle">Skip Cycle</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
     <string name="settings_title">Settings</string>
     <string name="settings_section_profile">Profile</string>
     <string name="settings_name_label">Your name</string>
@@ -63,6 +68,7 @@
     <string name="sort_option_amount_desc_label">Highest Amount</string>
     <string name="sorting_by">Sorting By</string>
     <string name="edit_subscription_title">Edit Subscription</string>
+    <string name="completed">Completed</string>
     <plurals name="days_left">
         <item quantity="one">%d day left</item>
         <item quantity="other">%d days left</item>

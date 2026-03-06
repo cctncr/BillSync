@@ -29,7 +29,7 @@ import com.example.billsync.presentation.common_components.CircularIconContainer
 import com.example.billsync.presentation.extensions.getStatusColor
 import com.example.billsync.presentation.extensions.toAbbreviation
 import com.example.billsync.presentation.extensions.toDisplayName
-import com.example.billsync.presentation.extensions.toDueDateMessage
+import com.example.billsync.presentation.extensions.toDueDateLabel
 import com.example.billsync.presentation.model.Subscription
 import java.time.LocalDate
 
@@ -37,13 +37,16 @@ import java.time.LocalDate
 fun SubscriptionCard(
     subscription: Subscription,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    currentDate: LocalDate = LocalDate.now()
+    modifier: Modifier = Modifier
 ) {
-    val borderColor = if (subscription.status == BillStatus.OVERDUE) {
-        MaterialTheme.colorScheme.error
-    } else {
-        MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+    val borderColor = when (subscription.status) {
+        BillStatus.OVERDUE ->
+            MaterialTheme.colorScheme.error
+
+        BillStatus.PENDING if subscription.daysUntilDue == 0L ->
+            MaterialTheme.colorScheme.tertiary
+
+        else -> MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
     }
 
     Surface(
@@ -89,11 +92,19 @@ fun SubscriptionCard(
                         overflow = TextOverflow.Ellipsis
                     )
 
-                    Text(
-                        text = subscription.dueDate.toDueDateMessage(currentDate),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
+                    if (subscription.daysUntilDue != null) {
+                        Text(
+                            text = subscription.daysUntilDue.toDueDateLabel(),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    } else if (subscription.status == BillStatus.PAID) {
+                        Text(
+                            text = stringResource(R.string.completed),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
                 }
             }
 
@@ -170,12 +181,12 @@ fun SubscriptionCard_Pending_Preview() {
             brandName = "Netflix",
             displayAmount = "$15.99",
             dueDate = LocalDate.now().plusDays(3),
+            daysUntilDue = 3L,
             status = BillStatus.PENDING,
             paymentFrequency = PaymentFrequency.MONTHLY,
             brandColor = Color.Red,
             brandIcon = null
         ),
-        currentDate = LocalDate.now(),
         onClick = { }
     )
 }
@@ -189,12 +200,12 @@ fun SubscriptionCard_Overdue_Preview() {
             brandName = "Spotify",
             displayAmount = "$7.99",
             dueDate = LocalDate.now().minusDays(2),
+            daysUntilDue = -2L,
             status = BillStatus.OVERDUE,
             paymentFrequency = PaymentFrequency.MONTHLY,
             brandColor = Color.Green,
             brandIcon = null
         ),
-        currentDate = LocalDate.now(),
         onClick = { }
     )
 }
@@ -208,12 +219,12 @@ fun SubscriptionCard_Paid_Preview() {
             brandName = "Very Very Long Brand Nameeeeeeeeee",
             displayAmount = "$6477.00",
             dueDate = LocalDate.now().plusDays(8),
+            daysUntilDue = 8L,
             status = BillStatus.PAID,
             paymentFrequency = PaymentFrequency.YEARLY,
             brandColor = Color.Cyan,
             brandIcon = null
         ),
-        currentDate = LocalDate.now(),
         onClick = { }
     )
 }

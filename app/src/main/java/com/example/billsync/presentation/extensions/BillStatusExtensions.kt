@@ -13,11 +13,12 @@ fun BillStatus.toDisplayName(): String = when (this) {
     BillStatus.OVERDUE -> stringResource(R.string.bill_status_overdue)
 }
 
-@Composable
-fun BillStatus.getStatusColor(): Color {
-    return when (this) {
-        BillStatus.PAID -> Color(0xFF4CAF50)
-        BillStatus.PENDING -> Color(0xFFFF9800)
-        BillStatus.OVERDUE -> Color(0xFFEF5350)
-    }
+private val PaidGreen = Color(0xFF4CAF50)
+private val PendingAmber = Color(0xFFFF9800)
+private val OverdueRed = Color(0xFFEF5350)
+
+fun BillStatus.getStatusColor(): Color = when (this) {
+    BillStatus.PAID -> PaidGreen
+    BillStatus.PENDING -> PendingAmber
+    BillStatus.OVERDUE -> OverdueRed
 }

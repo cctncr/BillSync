@@ -11,6 +11,7 @@ data class Subscription(
     val brandName: String,
     val displayAmount: String,
     val dueDate: LocalDate,
+    val daysUntilDue: Long?,
     val status: BillStatus,
     val paymentFrequency: PaymentFrequency,
     val brandColor: Color,

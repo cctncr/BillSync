@@ -3,9 +3,6 @@ package com.example.billsync.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.billsync.domain.repository.UserPreferencesRepository
-import com.example.billsync.domain.usecase.ClearUserDefaultCurrencyUseCase
-import com.example.billsync.domain.usecase.SaveUserDefaultCurrencyUseCase
-import com.example.billsync.domain.usecase.SaveUserNameUseCase
 import com.example.billsync.presentation.state.SettingsNavigationEvent
 import com.example.billsync.presentation.state.SettingsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,9 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val saveUserNameUseCase: SaveUserNameUseCase,
-    private val saveUserDefaultCurrencyUseCase: SaveUserDefaultCurrencyUseCase,
-    private val clearUserDefaultCurrencyUseCase: ClearUserDefaultCurrencyUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())
@@ -84,12 +78,12 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                saveUserNameUseCase(state.userName)
+                userPreferencesRepository.setUserName(state.userName)
                 val currency = state.selectedCurrency
                 if (currency != null) {
-                    saveUserDefaultCurrencyUseCase(currency.currencyCode)
+                    userPreferencesRepository.setUserDefaultCurrency(currency.currencyCode)
                 } else {
-                    clearUserDefaultCurrencyUseCase()
+                    userPreferencesRepository.clearUserDefaultCurrency()
                 }
                 _uiState.update { it.copy(navigationEvent = SettingsNavigationEvent.NavigateBack) }
             } catch (_: Exception) {

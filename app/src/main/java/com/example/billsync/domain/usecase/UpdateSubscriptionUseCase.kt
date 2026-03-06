@@ -10,7 +10,12 @@ class UpdateSubscriptionUseCase @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) {
     suspend operator fun invoke(subscription: Subscription) {
+        val current = repository.getSubscriptionById(subscription.id)
         repository.updateSubscription(subscription)
-        userPreferencesRepository.setLastUsedCurrency(subscription.amount.currency.currencyCode)
+        if (current?.amount?.currency != subscription.amount.currency) {
+            userPreferencesRepository.setLastUsedCurrency(
+                subscription.amount.currency.currencyCode
+            )
+        }
     }
 }

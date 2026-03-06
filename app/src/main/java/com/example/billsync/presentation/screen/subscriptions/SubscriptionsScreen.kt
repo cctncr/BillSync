@@ -16,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -26,16 +25,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.billsync.R
 import com.example.billsync.domain.model.BillSortOption
 import com.example.billsync.domain.model.BillStatus
 import com.example.billsync.domain.model.PaymentFrequency
+import com.example.billsync.presentation.model.FilterOption
+import com.example.billsync.presentation.preview.SubscriptionPreviewProvider
 import com.example.billsync.presentation.screen.subscriptions.components.FilterChipSection
 import com.example.billsync.presentation.screen.subscriptions.components.ProfileCard
 import com.example.billsync.presentation.screen.subscriptions.components.SubscriptionCard
 import com.example.billsync.presentation.screen.subscriptions.components.TotalBalanceCard
-import com.example.billsync.presentation.model.FilterOption
-import com.example.billsync.presentation.preview.SubscriptionPreviewProvider
 import com.example.billsync.presentation.state.SubscriptionsUiState
 import com.example.billsync.presentation.viewmodel.SubscriptionViewModel
 
@@ -46,7 +46,7 @@ fun SubscriptionScreen(
     onAddClick: () -> Unit,
     onProfileCardClick: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     SubscriptionContent(
         uiState = uiState,

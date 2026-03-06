@@ -4,8 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.billsync.domain.model.Subscription
 import com.example.billsync.domain.repository.SubscriptionRepository
-import com.example.billsync.domain.usecase.DeleteSubscriptionUseCase
+import com.example.billsync.domain.usecase.MarkSubscriptionAsPaidUseCase
+import com.example.billsync.domain.usecase.SkipBillingCycleUseCase
 import com.example.billsync.presentation.mapper.toUi
 import com.example.billsync.presentation.navigation.route.SubscriptionDetail
 import com.example.billsync.presentation.state.SubscriptionDetailNavigationEvent
@@ -21,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SubscriptionDetailViewModel @Inject constructor(
     private val repository: SubscriptionRepository,
-    private val deleteSubscriptionUseCase: DeleteSubscriptionUseCase,
+    private val markSubscriptionAsPaidUseCase: MarkSubscriptionAsPaidUseCase,
+    private val skipBillingCycleUseCase: SkipBillingCycleUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -29,6 +32,8 @@ class SubscriptionDetailViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(SubscriptionDetailUiState())
     val uiState: StateFlow<SubscriptionDetailUiState> = _uiState.asStateFlow()
+
+    private val _currentDomainSubscription = MutableStateFlow<Subscription?>(null)
 
     init {
         loadSubscription()
@@ -45,7 +50,14 @@ class SubscriptionDetailViewModel @Inject constructor(
                         )
                     } // TODO: Hardcoded String
                 } else {
-                    _uiState.update { it.copy(isLoading = false, subscription = subscription.toUi()) }
+                    _currentDomainSubscription.value = subscription
+
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            subscription = subscription.toUi()
+                        )
+                    }
                 }
             }
         }
@@ -55,17 +67,17 @@ class SubscriptionDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
-                deleteSubscriptionUseCase(subscriptionId)
+                repository.deleteSubscription(subscriptionId)
                 _uiState.update {
                     it.copy(
                         navigationEvent = SubscriptionDetailNavigationEvent.NavigateBack
                     )
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        error = "Failed to delete"
+                        error = e.message ?: "Failed to delete"
                     )
                 } // TODO: Hardcoded string
             }
@@ -74,5 +86,35 @@ class SubscriptionDetailViewModel @Inject constructor(
 
     fun onNavigationEventConsumed() {
         _uiState.update { it.copy(navigationEvent = null) }
+    }
+
+    fun onMarkAsPaid() {
+        val sub = _currentDomainSubscription.value ?: return
+        viewModelScope.launch {
+            try {
+                markSubscriptionAsPaidUseCase(sub)
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        error = e.message ?: "Failed to mark as paid"
+                    )
+                } // TODO(Hardcoded string)
+            }
+        }
+    }
+
+    fun onSkipCycle() {
+        val sub = _currentDomainSubscription.value ?: return
+        viewModelScope.launch {
+            try {
+                skipBillingCycleUseCase(sub)
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        error = e.message ?: "Failed to skip cycle"
+                    )
+                } // TODO(Hardcoded string)
+            }
+        }
     }
 }
