@@ -1,9 +1,11 @@
 package com.example.billsync.presentation.state
 
+import com.example.billsync.presentation.model.PaymentRecord
 import com.example.billsync.presentation.model.Subscription
 
 data class SubscriptionDetailUiState(
     val subscription: Subscription? = null,
+    val paymentHistory: List<PaymentRecord> = emptyList(),
     val isLoading: Boolean = true,
     val error: String? = null,
     val navigationEvent: SubscriptionDetailNavigationEvent? = null

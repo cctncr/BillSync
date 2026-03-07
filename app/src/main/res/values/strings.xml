@@ -41,6 +41,10 @@
     <string name="skip_cycle">Skip Cycle</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="payment_history">Payment History</string>
+    <string name="payment_history_empty">No payment history yet</string>
+    <string name="payment_type_paid">Paid</string>
+    <string name="payment_type_skipped">Skipped</string>
 
     <string name="settings_title">Settings</string>
     <string name="settings_section_profile">Profile</string>
