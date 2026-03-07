@@ -46,7 +46,8 @@ class SubscriptionPreviewProvider : PreviewParameterProvider<SubscriptionsUiStat
                     status = BillStatus.PENDING,
                     paymentFrequency = PaymentFrequency.MONTHLY,
                     brandColor = Color(0xFFE50914),
-                    brandIcon = null
+                    brandIcon = null,
+                    trialDaysLeft = null
                 ),
                 Subscription(
                     id = "2",
@@ -57,7 +58,8 @@ class SubscriptionPreviewProvider : PreviewParameterProvider<SubscriptionsUiStat
                     status = BillStatus.PENDING,
                     paymentFrequency = PaymentFrequency.MONTHLY,
                     brandColor = Color(0xFF1DB954),
-                    brandIcon = null
+                    brandIcon = null,
+                    trialDaysLeft = null
                 ),
                 Subscription(
                     id = "3",
@@ -68,7 +70,8 @@ class SubscriptionPreviewProvider : PreviewParameterProvider<SubscriptionsUiStat
                     status = BillStatus.OVERDUE,
                     paymentFrequency = PaymentFrequency.MONTHLY,
                     brandColor = Color(0xFFFF9900),
-                    brandIcon = null
+                    brandIcon = null,
+                    trialDaysLeft = null
                 ),
                 Subscription(
                     id = "4",
@@ -79,7 +82,8 @@ class SubscriptionPreviewProvider : PreviewParameterProvider<SubscriptionsUiStat
                     status = BillStatus.PENDING,
                     paymentFrequency = PaymentFrequency.MONTHLY,
                     brandColor = Color(0xFF181717),
-                    brandIcon = null
+                    brandIcon = null,
+                    trialDaysLeft = null
                 ),
             )
         )

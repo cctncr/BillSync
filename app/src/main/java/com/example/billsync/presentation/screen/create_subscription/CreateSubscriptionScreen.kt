@@ -41,6 +41,7 @@ import com.example.billsync.presentation.screen.create_subscription.components.B
 import com.example.billsync.presentation.screen.create_subscription.components.DueDateField
 import com.example.billsync.presentation.screen.create_subscription.components.FrequencySelector
 import com.example.billsync.presentation.screen.create_subscription.components.StatusSelector
+import com.example.billsync.presentation.screen.create_subscription.components.TrialToggleField
 import com.example.billsync.presentation.state.CreateSubscriptionNavigationEvent
 import com.example.billsync.presentation.state.CreateSubscriptionUiState
 import com.example.billsync.presentation.viewmodel.CreateSubscriptionViewModel
@@ -60,6 +61,7 @@ fun CreateSubscriptionScreen(
                 onNavigateBack()
                 viewModel.onNavigationEventConsumed()
             }
+
             null -> Unit
         }
     }
@@ -74,6 +76,8 @@ fun CreateSubscriptionScreen(
         onFrequencySelected = viewModel::onFrequencySelected,
         onStatusSelected = viewModel::onStatusSelected,
         onBrandColorChange = viewModel::onBrandColorChange,
+        onTrialToggle = viewModel::onTrialToggle,
+        onTrialEndDateChange = viewModel::onTrialEndDateChange,
         onSave = viewModel::onSave
     )
 }
@@ -91,6 +95,8 @@ private fun CreateSubscriptionContent(
     onFrequencySelected: (PaymentFrequency) -> Unit,
     onStatusSelected: (BillStatus) -> Unit,
     onBrandColorChange: (String) -> Unit,
+    onTrialToggle: (Boolean) -> Unit,
+    onTrialEndDateChange: (LocalDate) -> Unit,
     onSave: () -> Unit
 ) {
     var showCurrencyPicker by remember { mutableStateOf(false) }
@@ -152,6 +158,13 @@ private fun CreateSubscriptionContent(
                 onStatusSelected = onStatusSelected
             )
 
+            TrialToggleField(
+                isTrialEnabled = uiState.selectedStatus == BillStatus.TRIAL,
+                trialEndDate = uiState.trialEndDate,
+                onTrialToggle = onTrialToggle,
+                onTrialEndDateChange = onTrialEndDateChange
+            )
+
             uiState.error?.let { errorMessage ->
                 Text(
                     text = errorMessage,
@@ -194,6 +207,8 @@ private fun CreateSubscriptionContent_Preview(
         onFrequencySelected = {},
         onStatusSelected = {},
         onBrandColorChange = {},
+        onTrialToggle = {},
+        onTrialEndDateChange = {},
         onSave = {}
     )
 }

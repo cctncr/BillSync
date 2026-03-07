@@ -15,5 +15,6 @@ data class Subscription(
     val status: BillStatus,
     val paymentFrequency: PaymentFrequency,
     val brandColor: Color,
-    val brandIcon: ImageVector?
+    val brandIcon: ImageVector?,
+    val trialDaysLeft: Long?,
 )

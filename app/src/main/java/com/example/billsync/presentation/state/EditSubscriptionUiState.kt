@@ -16,6 +16,7 @@ data class EditSubscriptionUiState(
     val selectedFrequency: PaymentFrequency = PaymentFrequency.MONTHLY,
     val brandColorHex: String = "#9E9E9E",
     val brandIconId: String? = null,
+    val trialEndDate: LocalDate? = null,
     val isLoading: Boolean = true,
     val error: String? = null,
     val navigationEvent: EditSubscriptionNavigationEvent? = null

@@ -77,4 +77,19 @@
         <item quantity="one">%d day left</item>
         <item quantity="other">%d days left</item>
     </plurals>
+
+    <string name="bill_status_trial">Trial</string>
+    <string name="convert_to_paid">Convert to Paid</string>
+    <string name="trial_end_date_label">Trial ends on</string>
+    <string name="trial_toggle_label">Free trial</string>
+    <string name="trial_ends_today">Trial ends today</string>
+    <string name="trial_ends_tomorrow">Trial ends tomorrow</string>
+    <plurals name="trial_days_left">
+        <item quantity="one">Trial ends in %d day</item>
+        <item quantity="other">Trial ends in %d days</item>
+    </plurals>
+    <plurals name="trial_overdue_days">
+        <item quantity="one">Trial ended %d day ago</item>
+        <item quantity="other">Trial ended %d days ago</item>
+    </plurals>
 </resources>

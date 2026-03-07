@@ -21,6 +21,7 @@ internal fun SubscriptionEntity.toDomain(): Subscription = Subscription(
     paymentFrequency = PaymentFrequency.entries.find { it.name == paymentFrequency } ?: PaymentFrequency.MONTHLY,
     brandColorHex = brandColorHex,
     brandIconId = brandIconId,
+    trialEndDate = trialEndDateEpochDay?.let { LocalDate.ofEpochDay(it) }
 )
 
 internal fun Subscription.toEntity(): SubscriptionEntity = SubscriptionEntity(
@@ -32,5 +33,6 @@ internal fun Subscription.toEntity(): SubscriptionEntity = SubscriptionEntity(
     status = status.name,
     paymentFrequency = paymentFrequency.name,
     brandColorHex = brandColorHex,
-    brandIconId = brandIconId
+    brandIconId = brandIconId,
+    trialEndDateEpochDay = trialEndDate?.toEpochDay()
 )

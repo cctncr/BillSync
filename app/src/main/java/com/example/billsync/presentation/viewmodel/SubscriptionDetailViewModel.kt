@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.billsync.domain.extensions.convertToPaid
 import com.example.billsync.domain.model.Subscription
 import com.example.billsync.domain.repository.PaymentHistoryRepository
 import com.example.billsync.domain.repository.SubscriptionRepository
@@ -125,6 +126,19 @@ class SubscriptionDetailViewModel @Inject constructor(
                         error = e.message ?: "Failed to skip cycle"
                     )
                 } // TODO(Hardcoded string)
+            }
+        }
+    }
+
+    fun onConvertToPaid() {
+        val sub = _currentDomainSubscription.value ?: return
+        viewModelScope.launch {
+            try {
+                repository.updateSubscription(sub.convertToPaid())
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(error = e.message ?: "Failed to convert") // TODO(hardcoded string)
+                }
             }
         }
     }

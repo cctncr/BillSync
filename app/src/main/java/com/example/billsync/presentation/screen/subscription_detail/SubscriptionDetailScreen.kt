@@ -79,20 +79,33 @@ fun SubscriptionDetailScreen(
                         Text(text = it, color = MaterialTheme.colorScheme.error)
                     }
 
-                    if (subscription.status != BillStatus.PAID) {
-                        Button(
-                            onClick = viewModel::onMarkAsPaid,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(stringResource(R.string.mark_as_paid))
-                        }
-
-                        if (subscription.paymentFrequency != PaymentFrequency.ONE_TIME) {
-                            OutlinedButton(
-                                onClick = viewModel::onSkipCycle,
+                    when (subscription.status) {
+                        BillStatus.TRIAL -> {
+                            Button(
+                                onClick = viewModel::onConvertToPaid,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text(stringResource(R.string.skip_cycle))
+                                Text(stringResource(R.string.convert_to_paid))
+                            }
+                        }
+
+                        BillStatus.PAID -> {}
+
+                        else -> {
+                            Button(
+                                onClick = viewModel::onMarkAsPaid,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(stringResource(R.string.mark_as_paid))
+                            }
+
+                            if (subscription.paymentFrequency != PaymentFrequency.ONE_TIME) {
+                                OutlinedButton(
+                                    onClick = viewModel::onSkipCycle,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(stringResource(R.string.skip_cycle))
+                                }
                             }
                         }
                     }
@@ -130,11 +143,12 @@ fun SubscriptionDetailScreen(
                         )
                     } else {
                         uiState.paymentHistory.forEach { record ->
+                            val typeLabel = record.type.toDisplayName()
                             Text(
                                 text = buildString {
                                     append(record.formattedDate)
                                     append(" . ")
-                                    append(record.type.toDisplayName())
+                                    append(typeLabel)
                                     record.displayAmount?.let { append(" . $it") }
                                 },
                                 style = MaterialTheme.typography.bodyMedium

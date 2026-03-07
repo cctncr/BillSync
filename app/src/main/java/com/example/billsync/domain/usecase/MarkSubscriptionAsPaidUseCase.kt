@@ -17,6 +17,7 @@ class MarkSubscriptionAsPaidUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(subscription: Subscription) {
         if (subscription.status == BillStatus.PAID) return
+        if (subscription.status == BillStatus.TRIAL) return
         repository.updateSubscription(subscription.markAsPaid())
         paymentHistoryRepository.recordPayment(
             PaymentRecord(

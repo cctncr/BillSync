@@ -41,6 +41,7 @@ import com.example.billsync.presentation.screen.create_subscription.components.B
 import com.example.billsync.presentation.screen.create_subscription.components.DueDateField
 import com.example.billsync.presentation.screen.create_subscription.components.FrequencySelector
 import com.example.billsync.presentation.screen.create_subscription.components.StatusSelector
+import com.example.billsync.presentation.screen.create_subscription.components.TrialToggleField
 import com.example.billsync.presentation.state.EditSubscriptionNavigationEvent
 import com.example.billsync.presentation.state.EditSubscriptionUiState
 import com.example.billsync.presentation.viewmodel.EditSubscriptionViewModel
@@ -82,6 +83,8 @@ fun EditSubscriptionScreen(
         onFrequencySelected = viewModel::onFrequencySelected,
         onStatusSelected = viewModel::onStatusSelected,
         onBrandColorChange = viewModel::onBrandColorChange,
+        onTrialToggle = viewModel::onTrialToggle,
+        onTrialEndDateChange = viewModel::onTrialEndDateChange,
         onSave = viewModel::onSave
     )
 }
@@ -98,6 +101,8 @@ private fun EditSubscriptionContent(
     onFrequencySelected: (PaymentFrequency) -> Unit,
     onStatusSelected: (BillStatus) -> Unit,
     onBrandColorChange: (String) -> Unit,
+    onTrialToggle: (Boolean) -> Unit,
+    onTrialEndDateChange: (LocalDate) -> Unit,
     onSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -149,6 +154,13 @@ private fun EditSubscriptionContent(
             StatusSelector(
                 selectedStatus = uiState.selectedStatus,
                 onStatusSelected = onStatusSelected
+            )
+
+            TrialToggleField(
+                isTrialEnabled = uiState.selectedStatus == BillStatus.TRIAL,
+                trialEndDate = uiState.trialEndDate,
+                onTrialToggle = onTrialToggle,
+                onTrialEndDateChange = onTrialEndDateChange
             )
 
             uiState.error?.let {

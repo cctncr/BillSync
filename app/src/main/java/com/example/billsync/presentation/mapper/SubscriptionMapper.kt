@@ -1,6 +1,7 @@
 package com.example.billsync.presentation.mapper
 
 import com.example.billsync.domain.extensions.daysUntilDue
+import com.example.billsync.domain.extensions.daysUntilTrialEnd
 import com.example.billsync.domain.extensions.effectiveStatus
 import com.example.billsync.domain.model.BillStatus
 import com.example.billsync.domain.model.PaymentFrequency
@@ -17,6 +18,7 @@ fun DomainSubscription.toUi(): UiSubscription {
         effectiveStatus == BillStatus.PAID && paymentFrequency == PaymentFrequency.ONE_TIME -> null
         else -> daysUntilDue(today)
     }
+    val trialDaysLeft = daysUntilTrialEnd(today)
 
     return UiSubscription(
         id = id,
@@ -27,6 +29,7 @@ fun DomainSubscription.toUi(): UiSubscription {
         status = effectiveStatus,
         brandColor = brandColorHex.toComposeColor(),
         paymentFrequency = paymentFrequency,
-        brandIcon = null // TODO(add mapping),
+        brandIcon = null, // TODO(add mapping),
+        trialDaysLeft = trialDaysLeft
     )
 }
