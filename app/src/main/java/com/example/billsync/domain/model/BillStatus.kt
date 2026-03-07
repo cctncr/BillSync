@@ -3,9 +3,10 @@ package com.example.billsync.domain.model
 enum class BillStatus {
     PAID,
     PENDING,
-    OVERDUE;
+    OVERDUE,
+    TRIAL;
 
     companion object {
-        val selectableValues: List<BillStatus> = entries.filter { it != OVERDUE }
+        val selectableValues: List<BillStatus> = entries.filter { it != OVERDUE && it != TRIAL }
     }
 }

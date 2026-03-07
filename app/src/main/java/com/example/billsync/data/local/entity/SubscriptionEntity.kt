@@ -14,5 +14,6 @@ data class SubscriptionEntity(
     val status: String,
     val paymentFrequency: String,
     val brandColorHex: String,
-    val brandIconId: String?
+    val brandIconId: String?,
+    val trialEndDateEpochDay: Long?
 )

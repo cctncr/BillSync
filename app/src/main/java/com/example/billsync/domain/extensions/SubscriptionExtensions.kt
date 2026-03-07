@@ -41,6 +41,7 @@ fun Subscription.monthlyNormalizedAmount(): BigDecimal = when (paymentFrequency)
 }
 
 fun Subscription.effectiveStatus(currentDate: LocalDate): BillStatus = when {
+    status == BillStatus.TRIAL -> BillStatus.TRIAL
     status == BillStatus.PAID && paymentFrequency == PaymentFrequency.ONE_TIME -> BillStatus.PAID
     status == BillStatus.PAID && !isOverdue(currentDate) -> BillStatus.PAID
     isOverdue(currentDate) -> BillStatus.OVERDUE
@@ -74,3 +75,13 @@ fun List<Subscription>.averageDailyCost(): Money? {
         )
     }
 }
+
+fun Subscription.daysUntilTrialEnd(currentDate: LocalDate): Long? {
+    return trialEndDate?.let { ChronoUnit.DAYS.between(currentDate, it) }
+}
+
+fun Subscription.convertToPaid(): Subscription = copy(
+    status = BillStatus.PENDING,
+    trialEndDate = null
+)
+

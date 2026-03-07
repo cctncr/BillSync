@@ -19,6 +19,7 @@ class SkipBillingCycleUseCase @Inject constructor(
     suspend operator fun invoke(subscription: Subscription) {
         if (subscription.paymentFrequency == PaymentFrequency.ONE_TIME) return
         if (subscription.status == BillStatus.PAID) return
+        if (subscription.status == BillStatus.TRIAL) return
 
         repository.updateSubscription(subscription.skipCycle())
         paymentHistoryRepository.recordPayment(

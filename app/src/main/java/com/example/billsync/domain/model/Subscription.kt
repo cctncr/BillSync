@@ -10,5 +10,6 @@ data class Subscription(
     val status: BillStatus,
     val paymentFrequency: PaymentFrequency,
     val brandColorHex: String,
-    val brandIconId: String?
+    val brandIconId: String?,
+    val trialEndDate: LocalDate?
 )

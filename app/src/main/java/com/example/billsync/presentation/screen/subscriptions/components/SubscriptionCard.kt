@@ -185,7 +185,8 @@ fun SubscriptionCard_Pending_Preview() {
             status = BillStatus.PENDING,
             paymentFrequency = PaymentFrequency.MONTHLY,
             brandColor = Color.Red,
-            brandIcon = null
+            brandIcon = null,
+            trialDaysLeft = null
         ),
         onClick = { }
     )
@@ -204,7 +205,8 @@ fun SubscriptionCard_Overdue_Preview() {
             status = BillStatus.OVERDUE,
             paymentFrequency = PaymentFrequency.MONTHLY,
             brandColor = Color.Green,
-            brandIcon = null
+            brandIcon = null,
+            trialDaysLeft = null
         ),
         onClick = { }
     )
@@ -223,7 +225,8 @@ fun SubscriptionCard_Paid_Preview() {
             status = BillStatus.PAID,
             paymentFrequency = PaymentFrequency.YEARLY,
             brandColor = Color.Cyan,
-            brandIcon = null
+            brandIcon = null,
+            trialDaysLeft = null
         ),
         onClick = { }
     )

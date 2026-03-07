@@ -64,7 +64,8 @@ class EditSubscriptionViewModel @Inject constructor(
                         selectedStatus = subscription.status,
                         selectedFrequency = subscription.paymentFrequency,
                         brandColorHex = subscription.brandColorHex,
-                        brandIconId = subscription.brandIconId
+                        brandIconId = subscription.brandIconId,
+                        trialEndDate = subscription.trialEndDate
                     )
                 }
             }
@@ -112,6 +113,28 @@ class EditSubscriptionViewModel @Inject constructor(
         _uiState.update { it.copy(brandColorHex = colorHex) }
     }
 
+    fun onTrialToggle(enabled: Boolean) {
+        if (enabled) {
+            _uiState.update {
+                it.copy(
+                    selectedStatus = BillStatus.TRIAL,
+                    trialEndDate = LocalDate.now().plusMonths(1)
+                )
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    selectedStatus = BillStatus.PENDING,
+                    trialEndDate = null
+                )
+            }
+        }
+    }
+
+    fun onTrialEndDateChange(date: LocalDate) {
+        _uiState.update { it.copy(trialEndDate = date) }
+    }
+
     fun onSave() {
         val state = _uiState.value
 
@@ -134,7 +157,8 @@ class EditSubscriptionViewModel @Inject constructor(
             status = state.selectedStatus,
             paymentFrequency = state.selectedFrequency,
             brandColorHex = state.brandColorHex,
-            brandIconId = state.brandIconId
+            brandIconId = state.brandIconId,
+            trialEndDate = state.trialEndDate
         )
 
         viewModelScope.launch {

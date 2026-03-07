@@ -92,6 +92,28 @@ class CreateSubscriptionViewModel @Inject constructor(
         _uiState.update { it.copy(brandColorHex = colorHex) }
     }
 
+    fun onTrialToggle(enabled: Boolean) {
+        if (enabled) {
+            _uiState.update {
+                it.copy(
+                    selectedStatus = BillStatus.TRIAL,
+                    trialEndDate = LocalDate.now().plusMonths(1)
+                )
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    selectedStatus = BillStatus.PENDING,
+                    trialEndDate = null
+                )
+            }
+        }
+    }
+
+    fun onTrialEndDateChange(date: LocalDate) {
+        _uiState.update { it.copy(trialEndDate = date) }
+    }
+
     fun onSave() {
         val state = _uiState.value
 
@@ -115,7 +137,8 @@ class CreateSubscriptionViewModel @Inject constructor(
             status = state.selectedStatus,
             paymentFrequency = state.selectedFrequency,
             brandColorHex = state.brandColorHex,
-            brandIconId = state.brandIconId
+            brandIconId = state.brandIconId,
+            trialEndDate = state.trialEndDate
         )
 
         viewModelScope.launch {
