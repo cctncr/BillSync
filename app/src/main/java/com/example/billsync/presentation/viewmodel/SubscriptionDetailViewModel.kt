@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.billsync.domain.model.Subscription
+import com.example.billsync.domain.repository.PaymentHistoryRepository
 import com.example.billsync.domain.repository.SubscriptionRepository
 import com.example.billsync.domain.usecase.MarkSubscriptionAsPaidUseCase
 import com.example.billsync.domain.usecase.SkipBillingCycleUseCase
@@ -25,6 +26,7 @@ class SubscriptionDetailViewModel @Inject constructor(
     private val repository: SubscriptionRepository,
     private val markSubscriptionAsPaidUseCase: MarkSubscriptionAsPaidUseCase,
     private val skipBillingCycleUseCase: SkipBillingCycleUseCase,
+    private val paymentHistoryRepository: PaymentHistoryRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -37,6 +39,7 @@ class SubscriptionDetailViewModel @Inject constructor(
 
     init {
         loadSubscription()
+        loadPaymentHistory()
     }
 
     private fun loadSubscription() {
@@ -59,6 +62,14 @@ class SubscriptionDetailViewModel @Inject constructor(
                         )
                     }
                 }
+            }
+        }
+    }
+
+    private fun loadPaymentHistory() {
+        viewModelScope.launch {
+            paymentHistoryRepository.getPaymentHistory(subscriptionId).collect { records ->
+                _uiState.update { it.copy(paymentHistory = records.map { r -> r.toUi() }) }
             }
         }
     }

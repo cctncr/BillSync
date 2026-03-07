@@ -1,7 +1,9 @@
 package com.example.billsync.di.module
 
 import com.example.billsync.data.local.datastore.UserPreferencesDataSource
+import com.example.billsync.data.repository.PaymentHistoryRepositoryImpl
 import com.example.billsync.data.repository.SubscriptionRepositoryImpl
+import com.example.billsync.domain.repository.PaymentHistoryRepository
 import com.example.billsync.domain.repository.SubscriptionRepository
 import com.example.billsync.domain.repository.UserPreferencesRepository
 import dagger.Binds
@@ -25,4 +27,10 @@ abstract class RepositoryModule {
     abstract fun bindUserPreferencesRepository(
         impl: UserPreferencesDataSource
     ): UserPreferencesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPaymentHistoryRepository(
+        impl: PaymentHistoryRepositoryImpl
+    ): PaymentHistoryRepository
 }

@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,13 +30,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.billsync.R
 import com.example.billsync.domain.model.BillStatus
 import com.example.billsync.domain.model.PaymentFrequency
+import com.example.billsync.presentation.common_components.CurrencyPickerBottomSheet
 import com.example.billsync.presentation.screen.create_subscription.components.AmountSelectionCard
 import com.example.billsync.presentation.screen.create_subscription.components.BrandColorPicker
 import com.example.billsync.presentation.screen.create_subscription.components.BrandNameField
-import com.example.billsync.presentation.common_components.CurrencyPickerBottomSheet
 import com.example.billsync.presentation.screen.create_subscription.components.DueDateField
 import com.example.billsync.presentation.screen.create_subscription.components.FrequencySelector
 import com.example.billsync.presentation.screen.create_subscription.components.StatusSelector
@@ -52,7 +52,7 @@ fun EditSubscriptionScreen(
     onNavigateBack: () -> Unit,
     viewModel: EditSubscriptionViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState.navigationEvent) {
         when (uiState.navigationEvent) {

@@ -2,6 +2,7 @@ package com.example.billsync.di.module
 
 import android.content.Context
 import androidx.room.Room
+import com.example.billsync.data.local.dao.PaymentRecordDao
 import com.example.billsync.data.local.dao.SubscriptionDao
 import com.example.billsync.data.local.database.BillSyncDatabase
 import dagger.Module
@@ -22,11 +23,17 @@ object DatabaseModule {
             context,
             BillSyncDatabase::class.java,
             "billsync_database"
-        ).build()
+        ).fallbackToDestructiveMigration(false)
+            .build()
     }
 
     @Provides
     fun provideSubscriptionDao(database: BillSyncDatabase): SubscriptionDao {
         return database.subscriptionDao()
+    }
+
+    @Provides
+    fun providePaymentRecordDao(database: BillSyncDatabase): PaymentRecordDao {
+        return database.paymentRecordDao()
     }
 }

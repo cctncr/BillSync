@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -24,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.billsync.R
 import com.example.billsync.domain.model.BillStatus
 import com.example.billsync.domain.model.PaymentFrequency
+import com.example.billsync.presentation.extensions.toDisplayName
 import com.example.billsync.presentation.state.SubscriptionDetailNavigationEvent
 import com.example.billsync.presentation.viewmodel.SubscriptionDetailViewModel
 
@@ -60,6 +64,7 @@ fun SubscriptionDetailScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -107,6 +112,34 @@ fun SubscriptionDetailScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(stringResource(R.string.delete))
+                    }
+
+                    // Payment History
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                    Text(
+                        text = stringResource(R.string.payment_history),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    if (uiState.paymentHistory.isEmpty()) {
+                        Text(
+                            text = stringResource(R.string.payment_history_empty),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } else {
+                        uiState.paymentHistory.forEach { record ->
+                            Text(
+                                text = buildString {
+                                    append(record.formattedDate)
+                                    append(" . ")
+                                    append(record.type.toDisplayName())
+                                    record.displayAmount?.let { append(" . $it") }
+                                },
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
                 }
             }
